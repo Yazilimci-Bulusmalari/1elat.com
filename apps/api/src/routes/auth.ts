@@ -1,6 +1,16 @@
 import { Hono } from "hono";
+import type { Context } from "hono";
 import { setCookie, deleteCookie } from "hono/cookie";
-import { github, google, createSession, deleteSession } from "@1elat/auth";
+import {
+  getGitHubAuthUrl,
+  exchangeGitHubCode,
+  getGitHubProfile,
+  getGoogleAuthUrl,
+  exchangeGoogleCode,
+  getGoogleProfile,
+  createSession,
+  deleteSession,
+} from "@1elat/auth";
 import { UnauthorizedError, ValidationError } from "../lib/errors";
 import { authRequired } from "../middleware/auth";
 import {
@@ -29,7 +39,7 @@ authRoutes.get("/github", async (c) => {
     redirectUri: c.env.GITHUB_REDIRECT_URI,
   };
 
-  const authUrl = github.getAuthorizationUrl(config, state);
+  const authUrl = getGitHubAuthUrl(config, state);
   return c.redirect(authUrl);
 });
 
@@ -54,8 +64,8 @@ authRoutes.get("/github/callback", async (c) => {
     redirectUri: c.env.GITHUB_REDIRECT_URI,
   };
 
-  const accessToken = await github.exchangeCodeForToken(code, config);
-  const profile = await github.getUserProfile(accessToken);
+  const accessToken = await exchangeGitHubCode(code, config);
+  const profile = await getGitHubProfile(accessToken);
 
   const db = c.get("db");
   const { user, isNew } = await findOrCreateUserByGitHub(db, profile);
@@ -82,7 +92,7 @@ authRoutes.get("/google", async (c) => {
     redirectUri: c.env.GOOGLE_REDIRECT_URI,
   };
 
-  const authUrl = google.getAuthorizationUrl(config, state);
+  const authUrl = getGoogleAuthUrl(config, state);
   return c.redirect(authUrl);
 });
 
@@ -106,8 +116,8 @@ authRoutes.get("/google/callback", async (c) => {
     redirectUri: c.env.GOOGLE_REDIRECT_URI,
   };
 
-  const accessToken = await google.exchangeCodeForToken(code, config);
-  const profile = await google.getUserProfile(accessToken);
+  const accessToken = await exchangeGoogleCode(code, config);
+  const profile = await getGoogleProfile(accessToken);
 
   const db = c.get("db");
   const { user, isNew } = await findOrCreateUserByGoogle(db, profile);
@@ -122,7 +132,7 @@ authRoutes.get("/google/callback", async (c) => {
 
 // --- Logout ---
 
-authRoutes.post("/logout", async (c) => {
+async function performLogout(c: Context<AppEnv>): Promise<void> {
   const cookie = c.req.header("cookie") || "";
   const match = cookie.match(/session=([^;]+)/);
   const token = match ? match[1] : null;
@@ -132,7 +142,16 @@ authRoutes.post("/logout", async (c) => {
   }
 
   deleteCookie(c, "session", { path: "/" });
+}
 
+authRoutes.get("/logout", async (c) => {
+  await performLogout(c);
+  const origin = c.env.CORS_ORIGIN || "http://localhost:5173";
+  return c.redirect(`${origin}/auth/login`);
+});
+
+authRoutes.post("/logout", async (c) => {
+  await performLogout(c);
   return c.json({ data: { message: "Logged out" }, error: null });
 });
 

@@ -3,40 +3,36 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock @1elat/auth before importing routes
 vi.mock("@1elat/auth", () => ({
-  github: {
-    getAuthorizationUrl: vi.fn(
-      () => "https://github.com/login/oauth/authorize?client_id=test"
-    ),
-    exchangeCodeForToken: vi.fn(() => Promise.resolve("gho_mock_token")),
-    getUserProfile: vi.fn(() =>
-      Promise.resolve({
-        githubId: "12345",
-        email: "test@example.com",
-        name: "Test User",
-        avatarUrl: null,
-        githubUrl: "https://github.com/testuser",
-        login: "testuser",
-        bio: null,
-        location: null,
-      })
-    ),
-  },
-  google: {
-    getAuthorizationUrl: vi.fn(
-      () => "https://accounts.google.com/o/oauth2/v2/auth?client_id=test"
-    ),
-    exchangeCodeForToken: vi.fn(() => Promise.resolve("ya29.mock_token")),
-    getUserProfile: vi.fn(() =>
-      Promise.resolve({
-        googleId: "google-123",
-        email: "test@gmail.com",
-        name: "Test User",
-        avatarUrl: null,
-        firstName: "Test",
-        lastName: "User",
-      })
-    ),
-  },
+  getGitHubAuthUrl: vi.fn(
+    () => "https://github.com/login/oauth/authorize?client_id=test"
+  ),
+  exchangeGitHubCode: vi.fn(() => Promise.resolve("gho_mock_token")),
+  getGitHubProfile: vi.fn(() =>
+    Promise.resolve({
+      githubId: "12345",
+      email: "test@example.com",
+      name: "Test User",
+      avatarUrl: null,
+      githubUrl: "https://github.com/testuser",
+      login: "testuser",
+      bio: null,
+      location: null,
+    })
+  ),
+  getGoogleAuthUrl: vi.fn(
+    () => "https://accounts.google.com/o/oauth2/v2/auth?client_id=test"
+  ),
+  exchangeGoogleCode: vi.fn(() => Promise.resolve("ya29.mock_token")),
+  getGoogleProfile: vi.fn(() =>
+    Promise.resolve({
+      googleId: "google-123",
+      email: "test@gmail.com",
+      name: "Test User",
+      avatarUrl: null,
+      firstName: "Test",
+      lastName: "User",
+    })
+  ),
   createSession: vi.fn(() => Promise.resolve("test-session-token")),
   deleteSession: vi.fn(() => Promise.resolve()),
   getSession: vi.fn(),
@@ -62,7 +58,7 @@ const mockKV = {
 } as unknown as KVNamespace;
 
 // Stub crypto.randomUUID for state generation
-const originalCrypto = globalThis.crypto;
+const originalCrypto = (globalThis as Record<string, unknown>).crypto;
 vi.stubGlobal("crypto", {
   ...originalCrypto,
   randomUUID: vi.fn(() => "mock-state-uuid"),
@@ -77,6 +73,7 @@ const mockEnv = {
   GOOGLE_CLIENT_SECRET: "google-client-secret",
   GOOGLE_REDIRECT_URI: "http://localhost/auth/google/callback",
   CORS_ORIGIN: "http://localhost:5173",
+  API_VERSION: "0.0.0-test",
 };
 
 function createTestApp(): Hono {
@@ -142,6 +139,21 @@ describe("GET /auth/google", () => {
   });
 });
 
+describe("GET /auth/logout", () => {
+  it("redirects to login and clears session cookie", async () => {
+    const app = createTestApp();
+    const res = await app.request(
+      "/auth/logout",
+      { method: "GET", headers: { cookie: "session=active-token" } },
+      mockEnv
+    );
+
+    expect(res.status).toBe(302);
+    expect(res.headers.get("location")).toBe("http://localhost:5173/auth/login");
+    expect(deleteSession).toHaveBeenCalledWith(mockKV, "active-token");
+  });
+});
+
 describe("POST /auth/logout", () => {
   it("returns success response", async () => {
     const app = createTestApp();
@@ -152,7 +164,7 @@ describe("POST /auth/logout", () => {
     );
 
     expect(res.status).toBe(200);
-    const body = await res.json();
+    const body = (await res.json()) as { data: { message: string } };
     expect(body.data.message).toBe("Logged out");
   });
 

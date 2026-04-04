@@ -2,6 +2,7 @@ name = "1elat-api"
 main = "src/index.ts"
 compatibility_date = "2025-04-01"
 account_id = "07a66e46f94888850bd39f0f732d9556"
+routes = [{ pattern = "api.1elat.com", custom_domain = true }]
 
 [[d1_databases]]
 binding = "DB"
@@ -20,10 +21,12 @@ bucket_name = "1elat-files"
 # binding = "NOTIFICATIONS"
 # queue = "1elat-notifications"
 
+# Public OAuth client IDs (safe in repo). Secrets: GITHUB_CLIENT_SECRET, GOOGLE_CLIENT_SECRET
+# via `pnpm secrets:push` (reads from your shell env, never committed).
 [vars]
 API_VERSION = "0.1.0"
-# Secrets (set via `wrangler secret put`):
-# GITHUB_CLIENT_ID
-# GITHUB_CLIENT_SECRET
-# GOOGLE_CLIENT_ID
-# GOOGLE_CLIENT_SECRET
+CORS_ORIGIN = "https://1elat.com"
+GITHUB_REDIRECT_URI = "https://api.1elat.com/auth/github/callback"
+GOOGLE_REDIRECT_URI = "https://api.1elat.com/auth/google/callback"
+GITHUB_CLIENT_ID = "Ov23li8j4ykTpKlurpha"
+GOOGLE_CLIENT_ID = "555575126722-rljjpbbq1sc4rptar7h2hghap1kuflg7.apps.googleusercontent.com"

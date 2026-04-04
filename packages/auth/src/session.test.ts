@@ -42,7 +42,7 @@ describe("createSession", () => {
 
 describe("getSession", () => {
   it("returns userId for valid token", async () => {
-    vi.mocked(mockKV.get).mockResolvedValueOnce("user-456");
+    vi.mocked(mockKV.get).mockResolvedValueOnce("user-456" as never);
 
     const userId = await getSession(mockKV, "valid-token");
     expect(userId).toBe("user-456");
@@ -50,7 +50,7 @@ describe("getSession", () => {
   });
 
   it("returns null for invalid or expired token", async () => {
-    vi.mocked(mockKV.get).mockResolvedValueOnce(null);
+    vi.mocked(mockKV.get).mockResolvedValueOnce(null as never);
 
     const userId = await getSession(mockKV, "expired-token");
     expect(userId).toBeNull();
@@ -67,7 +67,7 @@ describe("deleteSession", () => {
 
 describe("refreshSession", () => {
   it("re-puts existing session with full TTL", async () => {
-    vi.mocked(mockKV.get).mockResolvedValueOnce("user-789");
+    vi.mocked(mockKV.get).mockResolvedValueOnce("user-789" as never);
 
     const result = await refreshSession(mockKV, "active-token");
 
@@ -81,7 +81,7 @@ describe("refreshSession", () => {
   });
 
   it("returns false if session does not exist", async () => {
-    vi.mocked(mockKV.get).mockResolvedValueOnce(null);
+    vi.mocked(mockKV.get).mockResolvedValueOnce(null as never);
 
     const result = await refreshSession(mockKV, "nonexistent-token");
 

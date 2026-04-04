@@ -1,0 +1,16 @@
+name = "1elat-web"
+main = "worker.ts"
+compatibility_date = "2025-04-01"
+account_id = "07a66e46f94888850bd39f0f732d9556"
+routes = [{ pattern = "1elat.com", custom_domain = true }]
+assets = { directory = "build/client" }
+
+[[services]]
+binding = "API"
+service = "1elat-api"
+
+[vars]
+APP_NAME = "1elat"
+API_URL = "https://api.1elat.com"
+# Secrets (set via `wrangler secret put`):
+# SESSION_SECRET

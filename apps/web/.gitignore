@@ -1,9 +1,4 @@
 node_modules/
-dist/
 build/
-.wrangler/
 .turbo/
 .react-router/
-.dev.vars
-*.log
-.DS_Store
