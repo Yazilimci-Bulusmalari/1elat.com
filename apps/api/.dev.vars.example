@@ -1,0 +1,14 @@
+# Local API (`pnpm dev`). Copy to `.dev.vars` (gitignored) and fill secrets.
+#
+# GitHub: use your *development* OAuth app; callback must match GitHub app settings.
+# Google: same Web client as prod if you added the local redirect URI in Google Cloud.
+
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+GITHUB_REDIRECT_URI=http://127.0.0.1:8787/auth/github/callback
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URI=http://127.0.0.1:8787/auth/google/callback
+
+CORS_ORIGIN=http://localhost:5173

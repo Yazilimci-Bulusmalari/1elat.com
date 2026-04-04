@@ -5,7 +5,8 @@
     "dev": "wrangler dev",
     "build": "wrangler deploy --dry-run --outdir dist",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "secrets:push": "bash scripts/push-production-secrets.sh"
   },
   "dependencies": {
     "hono": "^4.7.0",

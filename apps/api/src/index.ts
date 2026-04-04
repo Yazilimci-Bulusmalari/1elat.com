@@ -33,7 +33,7 @@ app.get("/", (c) => {
 });
 
 app.get("/health", (c) => {
-  return c.json({ status: "ok" });
+  return c.json({ status: "ok", version: c.env.API_VERSION });
 });
 
 app.route("/auth", authRoutes);
