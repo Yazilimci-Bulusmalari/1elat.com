@@ -1,13 +1,3 @@
-export interface User {
-  id: string;
-  githubId: string | null;
-  googleId: string | null;
-  email: string;
-  name: string;
-  avatarUrl: string | null;
-  createdAt: Date;
-}
-
 export interface ApiResponse<T> {
   data: T;
   error: null;
@@ -22,3 +12,15 @@ export interface ApiError {
 }
 
 export type ApiResult<T> = ApiResponse<T> | ApiError;
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  cursor: string | null;
+  hasMore: boolean;
+  total?: number;
+}
+
+export interface Cursor {
+  id: string;
+  createdAt: string;
+}

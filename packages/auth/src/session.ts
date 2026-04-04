@@ -22,3 +22,13 @@ export async function deleteSession(
 ): Promise<void> {
   await kv.delete(`session:${token}`);
 }
+
+export async function refreshSession(
+  kv: KVNamespace,
+  token: string
+): Promise<boolean> {
+  const userId = await kv.get(`session:${token}`);
+  if (!userId) return false;
+  await kv.put(`session:${token}`, userId, { expirationTtl: SESSION_TTL });
+  return true;
+}

@@ -1,42 +1,41 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+import { secureHeaders } from "hono/secure-headers";
+import { createDb } from "@1elat/db";
+import { errorHandler } from "./middleware/error-handler";
+import { authRoutes } from "./routes/auth";
+import type { AppEnv } from "./types";
 
-type Bindings = {
-  DB: D1Database;
-  SESSION: KVNamespace;
-  FILES: R2Bucket;
-  NOTIFICATIONS: Queue;
-  API_VERSION: string;
-};
+const app = new Hono<AppEnv>();
 
-const app = new Hono<{ Bindings: Bindings }>();
-
+// Global middleware
 app.use("*", logger());
-app.use("*", cors());
+app.use("*", secureHeaders());
+app.use("*", (c, next) => {
+  const origin = c.env.CORS_ORIGIN || "http://localhost:5173";
+  return cors({ origin, credentials: true })(c, next);
+});
 
+// DB middleware - initialize drizzle instance per request
+app.use("*", async (c, next) => {
+  const db = createDb(c.env.DB);
+  c.set("db", db);
+  await next();
+});
+
+// Error handler
+app.onError(errorHandler);
+
+// Health check
 app.get("/", (c) => {
   return c.json({ message: "1elat api", version: "0.1.0" });
 });
 
 app.get("/health", (c) => {
-  return c.json({
-    status: "ok",
-    services: {
-      d1: "connected",
-      kv: "connected",
-      r2: "connected",
-      queue: "connected",
-    },
-  });
+  return c.json({ status: "ok" });
 });
 
-app.get("/auth/github", (c) => {
-  return c.json({ message: "github oauth - not implemented" });
-});
-
-app.get("/auth/google", (c) => {
-  return c.json({ message: "google oauth - not implemented" });
-});
+app.route("/auth", authRoutes);
 
 export default app;

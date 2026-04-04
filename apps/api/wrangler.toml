@@ -1,23 +1,24 @@
 name = "1elat-api"
 main = "src/index.ts"
 compatibility_date = "2025-04-01"
+account_id = "07a66e46f94888850bd39f0f732d9556"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "1elat-db"
-database_id = "placeholder-d1-id" # Replace with actual D1 database ID
+database_id = "0e8e0511-87c3-4fa5-9ddc-36fa6ad810ef"
 
 [[kv_namespaces]]
 binding = "SESSION"
-id = "placeholder-kv-id" # Replace with actual KV namespace ID
+id = "05cdcbfe35664315b9b5fb2a301d1f28"
 
 [[r2_buckets]]
 binding = "FILES"
 bucket_name = "1elat-files"
 
-[[queues.producers]]
-binding = "NOTIFICATIONS"
-queue = "1elat-notifications"
+# [[queues.producers]]
+# binding = "NOTIFICATIONS"
+# queue = "1elat-notifications"
 
 [vars]
 API_VERSION = "0.1.0"

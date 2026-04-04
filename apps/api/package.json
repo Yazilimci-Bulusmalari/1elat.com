@@ -4,15 +4,20 @@
   "scripts": {
     "dev": "wrangler dev",
     "build": "wrangler deploy --dry-run --outdir dist",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "hono": "^4.7.0",
+    "nanoid": "^5.0.0",
+    "drizzle-orm": "^0.40.0",
+    "@1elat/auth": "workspace:*",
     "@1elat/db": "workspace:*",
     "@1elat/shared": "workspace:*"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250327.0",
+    "vitest": "^4.1.2",
     "wrangler": "^4.6.0",
     "typescript": "^5.7.0"
   }
