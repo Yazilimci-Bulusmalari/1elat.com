@@ -38,9 +38,6 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Generate migrations
-        run: pnpm --filter @1elat/db generate
-
       - name: Apply D1 migrations
         run: pnpm exec wrangler d1 migrations apply 1elat-db --remote
         working-directory: apps/api
