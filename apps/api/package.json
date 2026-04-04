@@ -9,17 +9,18 @@
     "secrets:push": "bash scripts/push-production-secrets.sh"
   },
   "dependencies": {
-    "hono": "^4.7.0",
-    "nanoid": "^5.0.0",
-    "drizzle-orm": "^0.40.0",
     "@1elat/auth": "workspace:*",
     "@1elat/db": "workspace:*",
-    "@1elat/shared": "workspace:*"
+    "@1elat/shared": "workspace:*",
+    "drizzle-orm": "^0.40.0",
+    "hono": "^4.7.0",
+    "nanoid": "^5.0.0",
+    "zod": "^3.24.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250327.0",
+    "typescript": "^5.7.0",
     "vitest": "^4.1.2",
-    "wrangler": "^4.6.0",
-    "typescript": "^5.7.0"
+    "wrangler": "^4.6.0"
   }
 }
