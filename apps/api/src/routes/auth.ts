@@ -68,14 +68,13 @@ authRoutes.get("/github/callback", async (c) => {
   const profile = await getGitHubProfile(accessToken);
 
   const db = c.get("db");
-  const { user, isNew } = await findOrCreateUserByGitHub(db, profile);
+  const { user } = await findOrCreateUserByGitHub(db, profile);
 
   const sessionToken = await createSession(c.env.SESSION, user.id);
   setSessionCookie(c, sessionToken);
 
   const origin = c.env.CORS_ORIGIN || "http://localhost:5173";
-  const redirectPath = isNew ? "/onboarding" : "/dashboard";
-  return c.redirect(`${origin}${redirectPath}`);
+  return c.redirect(`${origin}/dashboard`);
 });
 
 // --- Google OAuth ---
@@ -120,14 +119,13 @@ authRoutes.get("/google/callback", async (c) => {
   const profile = await getGoogleProfile(accessToken);
 
   const db = c.get("db");
-  const { user, isNew } = await findOrCreateUserByGoogle(db, profile);
+  const { user } = await findOrCreateUserByGoogle(db, profile);
 
   const sessionToken = await createSession(c.env.SESSION, user.id);
   setSessionCookie(c, sessionToken);
 
   const origin = c.env.CORS_ORIGIN || "http://localhost:5173";
-  const redirectPath = isNew ? "/onboarding" : "/dashboard";
-  return c.redirect(`${origin}${redirectPath}`);
+  return c.redirect(`${origin}/dashboard`);
 });
 
 // --- Logout ---

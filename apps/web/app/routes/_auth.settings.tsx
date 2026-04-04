@@ -4,7 +4,7 @@ import { Separator } from "~/components/ui/separator";
 
 export default function SettingsPage() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
+    <div className="mx-auto max-w-2xl">
       <div className="flex items-center gap-3">
         <Settings className="h-8 w-8 text-muted-foreground" />
         <div>

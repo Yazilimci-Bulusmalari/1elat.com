@@ -3,7 +3,7 @@ import { Separator } from "~/components/ui/separator";
 
 export default function NotificationsPage() {
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
+    <div className="mx-auto max-w-4xl">
       <div className="flex items-center gap-3">
         <Bell className="h-8 w-8 text-muted-foreground" />
         <div>
