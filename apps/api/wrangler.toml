@@ -8,6 +8,7 @@ routes = [{ pattern = "api.1elat.com", custom_domain = true }]
 binding = "DB"
 database_name = "1elat-db"
 database_id = "0e8e0511-87c3-4fa5-9ddc-36fa6ad810ef"
+migrations_dir = "../../packages/db/migrations"
 
 [[kv_namespaces]]
 binding = "SESSION"
