@@ -135,7 +135,13 @@ async function performLogout(c: Context<AppEnv>): Promise<void> {
   if (token) {
     await deleteSession(c.env.SESSION, token);
   }
-  deleteCookie(c, "session", { path: "/" });
+
+  const origin = c.env.CORS_ORIGIN || "http://localhost:5173";
+  const hostname = new URL(origin).hostname;
+  const isLocalDev = hostname === "localhost" || hostname === "127.0.0.1";
+  const domain = isLocalDev ? undefined : hostname.split(".").slice(-2).join(".");
+
+  deleteCookie(c, "session", { path: "/", domain });
 }
 
 authRoutes.get("/logout", async (c) => {
@@ -170,7 +176,8 @@ function setSessionCookie(
   token: string
 ): void {
   const origin = c.env.CORS_ORIGIN || "http://localhost:5173";
-  const isLocalDev = origin.includes("localhost") || origin.includes("127.0.0.1");
+  const hostname = new URL(origin).hostname;
+  const isLocalDev = hostname === "localhost" || hostname === "127.0.0.1";
 
   const parts = [
     `session=${token}`,
@@ -181,6 +188,9 @@ function setSessionCookie(
   ];
 
   if (!isLocalDev) {
+    // Share across subdomains (e.g. 1elat.com and api.1elat.com).
+    const parent = hostname.split(".").slice(-2).join(".");
+    parts.push(`Domain=${parent}`);
     parts.push("Secure");
   }
 
