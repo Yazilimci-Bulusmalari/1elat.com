@@ -10,8 +10,17 @@ import {
   updateUserAdmin,
 } from "../services/admin-users.service";
 import {
+  listAllSkills,
+  createSkill,
+  updateSkill,
+  deleteSkill,
+  getSkillById,
+} from "../services/skill.service";
+import {
   listAdminUsersQuerySchema,
   updateAdminUserSchema,
+  createSkillSchema,
+  updateSkillSchema,
 } from "@1elat/shared";
 import { NotFoundError, ValidationError } from "../lib/errors";
 import type { AppEnv } from "../types";
@@ -108,4 +117,66 @@ adminRoutes.patch("/users/:id", async (c) => {
   }
 
   return c.json({ data: updated, error: null });
+});
+
+adminRoutes.get("/skills", async (c) => {
+  const db = c.get("db");
+  const skills = await listAllSkills(db);
+  return c.json({ data: skills, error: null });
+});
+
+adminRoutes.post("/skills", async (c) => {
+  const db = c.get("db");
+  let body: unknown;
+  try {
+    body = await c.req.json();
+  } catch {
+    throw new ValidationError("Gecersiz JSON govdesi");
+  }
+
+  const parsed = createSkillSchema.safeParse(body);
+  if (!parsed.success) {
+    throw new ValidationError(
+      parsed.error.issues[0]?.message ?? "Gecersiz govde"
+    );
+  }
+
+  const skill = await createSkill(db, parsed.data);
+  return c.json({ data: skill, error: null }, 201);
+});
+
+adminRoutes.patch("/skills/:id", async (c) => {
+  const db = c.get("db");
+  const skillId = c.req.param("id");
+
+  let body: unknown;
+  try {
+    body = await c.req.json();
+  } catch {
+    throw new ValidationError("Gecersiz JSON govdesi");
+  }
+
+  const parsed = updateSkillSchema.safeParse(body);
+  if (!parsed.success) {
+    throw new ValidationError(
+      parsed.error.issues[0]?.message ?? "Gecersiz govde"
+    );
+  }
+
+  const existing = await getSkillById(db, skillId);
+  if (!existing) throw new NotFoundError("Skill");
+
+  const updated = await updateSkill(db, skillId, parsed.data);
+  return c.json({ data: updated, error: null });
+});
+
+adminRoutes.delete("/skills/:id", async (c) => {
+  const db = c.get("db");
+  const skillId = c.req.param("id");
+
+  const existing = await getSkillById(db, skillId);
+  if (!existing) throw new NotFoundError("Skill");
+
+  await deleteSkill(db, skillId);
+  return c.json({ data: null, error: null });
 });

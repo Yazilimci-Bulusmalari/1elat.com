@@ -1,9 +1,5 @@
 import { z } from "zod";
 
-/**
- * Admin tarafindan kullanici guncelleme sema'si.
- * En az bir alan zorunlu (refine ile dogrulanir).
- */
 export const updateAdminUserSchema = z
   .object({
     role: z.enum(["user", "admin"]).optional(),
@@ -24,3 +20,21 @@ export const listAdminUsersQuerySchema = z.object({
 });
 
 export type ListAdminUsersQuery = z.infer<typeof listAdminUsersQuerySchema>;
+
+export const createSkillSchema = z.object({
+  slug: z
+    .string()
+    .min(2)
+    .max(50)
+    .regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
+  nameEn: z.string().min(1).max(100),
+  nameTr: z.string().min(1).max(100),
+  icon: z.string().max(50).optional(),
+  parentId: z.string().optional(),
+  sortOrder: z.number().int().min(0).optional(),
+});
+
+export const updateSkillSchema = createSkillSchema.partial();
+
+export type CreateSkillInput = z.infer<typeof createSkillSchema>;
+export type UpdateSkillInput = z.infer<typeof updateSkillSchema>;

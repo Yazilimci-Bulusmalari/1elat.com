@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouteLoaderData } from "react-router";
 import {
   User,
@@ -12,6 +12,8 @@ import {
   AlertTriangle,
   ArrowRight,
   Globe,
+  Wrench,
+  Check,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -21,11 +23,12 @@ import { Switch } from "~/components/ui/switch";
 import { Separator } from "~/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { cn } from "~/lib/utils";
-import { useT } from "~/lib/i18n";
+import { useT, useLang } from "~/lib/i18n";
 import type { loader as authLoader } from "./_auth";
 import type { AuthUser } from "~/lib/auth";
+import type { Skill } from "@1elat/shared";
 
-type SettingsTab = "account" | "linked" | "password" | "notifications" | "delete";
+type SettingsTab = "account" | "linked" | "skills" | "password" | "notifications" | "delete";
 
 interface TabItem {
   id: SettingsTab;
@@ -417,6 +420,120 @@ function NotificationsTab({ t }: { t: ReturnType<typeof useT> }): React.ReactEle
   );
 }
 
+function SkillsTab({
+  user,
+  apiUrl,
+  t,
+}: {
+  user: AuthUser;
+  apiUrl: string;
+  t: ReturnType<typeof useT>;
+}): React.ReactElement {
+  const s = t.settings.skills;
+  const lang = useLang();
+  const [allSkills, setAllSkills] = useState<Skill[]>([]);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(
+    () => new Set(user.skills.map((sk) => sk.id))
+  );
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    fetch(`${apiUrl}/skills`, { credentials: "include" })
+      .then((r) => r.json())
+      .then((json) => {
+        const parsed = json as { data: Skill[] };
+        setAllSkills(parsed.data ?? []);
+      })
+      .catch(() => {});
+  }, [apiUrl]);
+
+  const toggleSkill = useCallback((id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else if (next.size < 15) {
+        next.add(id);
+      }
+      return next;
+    });
+    setSaved(false);
+  }, []);
+
+  async function handleSave(): Promise<void> {
+    setSaving(true);
+    setSaved(false);
+    try {
+      const res = await fetch(`${apiUrl}/users/me/skills`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ skillIds: [...selectedIds] }),
+      });
+      if (res.ok) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      }
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div>
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold">{s.title}</h2>
+        <p className="text-sm text-muted-foreground">{s.description}</p>
+      </div>
+
+      {allSkills.length === 0 ? (
+        <p className="text-sm text-muted-foreground">{s.noSkills}</p>
+      ) : (
+        <>
+          <div className="mb-4 flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">{s.subtitle}</p>
+            <span className="text-xs text-muted-foreground">
+              {s.selected.replace("{count}", String(selectedIds.size))}
+            </span>
+          </div>
+          <p className="mb-4 text-xs text-muted-foreground">{s.maxSkills}</p>
+
+          <div className="mb-6 flex flex-wrap gap-2">
+            {allSkills.map((skill) => {
+              const isSelected = selectedIds.has(skill.id);
+              const label = lang === "tr" ? skill.nameTr : skill.nameEn;
+              return (
+                <button
+                  key={skill.id}
+                  type="button"
+                  onClick={() => toggleSkill(skill.id)}
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
+                    isSelected
+                      ? "border-accent-brand bg-accent-brand/10 text-accent-brand"
+                      : "border-border text-muted-foreground hover:border-foreground/30 hover:text-foreground"
+                  )}
+                >
+                  {isSelected ? <Check className="h-3.5 w-3.5" /> : null}
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+
+          <Button
+            onClick={handleSave}
+            disabled={saving || selectedIds.size === 0}
+          >
+            {saving ? s.saving : saved ? s.saved : s.save}
+          </Button>
+        </>
+      )}
+    </div>
+  );
+}
+
 function DeleteAccountTab({ user, t }: { user: AuthUser; t: ReturnType<typeof useT> }): React.ReactElement {
   const s = t.settings.deleteAccount;
   const [confirmEmail, setConfirmEmail] = useState("");
@@ -465,6 +582,7 @@ export default function SettingsPage(): React.ReactElement {
   const tabs: TabItem[] = [
     { id: "account", label: t.settings.tabs.account, icon: User },
     { id: "linked", label: t.settings.tabs.linkedAccounts, icon: Link2 },
+    { id: "skills", label: t.settings.tabs.skills, icon: Wrench },
     { id: "password", label: t.settings.tabs.password, icon: KeyRound },
     { id: "notifications", label: t.settings.tabs.notifications, icon: Bell },
     { id: "delete", label: t.settings.tabs.deleteAccount, icon: Trash2 },
@@ -500,6 +618,7 @@ export default function SettingsPage(): React.ReactElement {
         <div className="min-w-0 flex-1">
           {activeTab === "account" && <AccountTab user={user} apiUrl={apiUrl} t={t} />}
           {activeTab === "linked" && <LinkedAccountsTab user={user} t={t} />}
+          {activeTab === "skills" && <SkillsTab user={user} apiUrl={apiUrl} t={t} />}
           {activeTab === "password" && <PasswordTab t={t} />}
           {activeTab === "notifications" && <NotificationsTab t={t} />}
           {activeTab === "delete" && <DeleteAccountTab user={user} t={t} />}

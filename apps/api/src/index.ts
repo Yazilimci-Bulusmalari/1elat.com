@@ -7,6 +7,12 @@ import { errorHandler } from "./middleware/error-handler";
 import { authRoutes } from "./routes/auth";
 import { userRoutes } from "./routes/users";
 import { adminRoutes } from "./routes/admin";
+import { skillRoutes } from "./routes/skills";
+import { projectsRoutes } from "./routes/projects";
+import { commentsRoutes } from "./routes/comments";
+import { invitationsRoutes } from "./routes/invitations";
+import { filesRoutes } from "./routes/files";
+import { lookupRoutes } from "./routes/lookups";
 import type { AppEnv } from "./types";
 
 const app = new Hono<AppEnv>();
@@ -41,5 +47,11 @@ app.get("/health", (c) => {
 app.route("/auth", authRoutes);
 app.route("/users", userRoutes);
 app.route("/admin", adminRoutes);
+app.route("/skills", skillRoutes);
+app.route("/", projectsRoutes);
+app.route("/comments", commentsRoutes);
+app.route("/", invitationsRoutes);
+app.route("/files", filesRoutes);
+app.route("/lookups", lookupRoutes);
 
 export default app;

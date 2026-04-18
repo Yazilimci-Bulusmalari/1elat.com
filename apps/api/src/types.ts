@@ -1,4 +1,7 @@
 import type { Database } from "@1elat/db";
+import type { schema as dbSchema } from "@1elat/db";
+
+type ProjectRow = typeof dbSchema.projects.$inferSelect;
 
 export type Bindings = {
   DB: D1Database;
@@ -12,6 +15,7 @@ export type Bindings = {
   GOOGLE_CLIENT_SECRET: string;
   GOOGLE_REDIRECT_URI: string;
   API_VERSION: string;
+  API_URL: string;
   CORS_ORIGIN: string;
   ADMIN_EMAILS?: string;
 };
@@ -20,6 +24,8 @@ export type Variables = {
   userId: string;
   db: Database;
   validatedBody: unknown;
+  project: ProjectRow;
+  projectOwner: { id: string; username: string };
 };
 
 export type AppEnv = {

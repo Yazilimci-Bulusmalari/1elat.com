@@ -7,11 +7,13 @@ import {
   Calendar,
   ExternalLink,
   ArrowLeft,
+  Briefcase,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { useT, useLang } from "~/lib/i18n";
+import type { Skill } from "@1elat/shared";
 
 interface PublicUser {
   id: string;
@@ -30,6 +32,8 @@ interface PublicUser {
   rating: number;
   ratingCount: number;
   isPublic: boolean;
+  isOpenToWork: boolean;
+  skills: Skill[];
   createdAt: string;
   updatedAt: string;
 }
@@ -154,10 +158,37 @@ export default function UserProfilePage(): React.ReactElement {
             </div>
           </div>
 
+          {user.isOpenToWork ? (
+            <div className="flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/5 px-3 py-2">
+              <Briefcase className="h-4 w-4 text-green-600 dark:text-green-400" />
+              <span className="text-sm font-medium text-green-600 dark:text-green-400">
+                {t.publicProfile.openToWork}
+              </span>
+            </div>
+          ) : null}
+
           {user.bio ? (
             <p className="text-sm leading-relaxed text-foreground/80">
               {user.bio}
             </p>
+          ) : null}
+
+          {user.skills && user.skills.length > 0 ? (
+            <div>
+              <p className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                {t.publicProfile.skills}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {user.skills.map((skill) => (
+                  <span
+                    key={skill.id}
+                    className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground"
+                  >
+                    {lang === "tr" ? skill.nameTr : skill.nameEn}
+                  </span>
+                ))}
+              </div>
+            </div>
           ) : null}
 
           <Button variant="outline" className="w-full">

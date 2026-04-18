@@ -1,12 +1,10 @@
-import { Link, useRouteLoaderData } from "react-router";
+import { Link, useLoaderData, useRouteLoaderData } from "react-router";
 import {
   Plus,
   FolderOpen,
   ExternalLink,
   Pencil,
   MoreHorizontal,
-  Globe,
-  Lock,
   Search,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
@@ -20,10 +18,39 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useT } from "~/lib/i18n";
 import type { loader as authLoader } from "./_auth";
+import type { Route } from "./+types/_auth.projects";
+import type { ProjectListItem } from "@1elat/shared";
+
+interface ApiEnvelope<T> {
+  data: T | null;
+  error: { message: string } | null;
+}
+
+interface MyProjectsLoaderData {
+  projects: ProjectListItem[];
+}
+
+export async function loader({
+  request,
+  context,
+}: Route.LoaderArgs): Promise<MyProjectsLoaderData> {
+  const apiUrl =
+    context.cloudflare?.env?.API_URL ?? "http://127.0.0.1:8787";
+  const cookie = request.headers.get("cookie") ?? "";
+  const res = await fetch(`${apiUrl}/me/projects?status=all&limit=50`, {
+    headers: { cookie },
+  });
+  if (!res.ok) {
+    return { projects: [] };
+  }
+  const json = (await res.json()) as ApiEnvelope<{ items: ProjectListItem[] }>;
+  return { projects: json.data?.items ?? [] };
+}
 
 export default function MyProjectsPage(): React.ReactElement {
   const data = useRouteLoaderData<typeof authLoader>("routes/_auth");
   if (!data) throw new Error("Missing auth layout data");
+  const { projects } = useLoaderData<typeof loader>();
 
   const t = useT();
   const isProjectsLabel = t.nav.projects;
@@ -39,16 +66,10 @@ export default function MyProjectsPage(): React.ReactElement {
     : "Projelerinizi yonetin ve duzenleyin.";
   const searchPlaceholder = isProjectsLabel === "Projects" ? "Search projects..." : "Proje ara...";
 
-  // Placeholder -- projects will come from API
-  const projects: Array<{
-    slug: string;
-    name: string;
-    tagline: string | null;
-    isPublic: boolean;
-    likesCount: number;
-    viewsCount: number;
-    updatedAt: string;
-  }> = [];
+  const isTR = isProjectsLabel !== "Projects";
+  const statusLabels: Record<string, string> = isTR
+    ? { draft: "Taslak", published: "Yayinda", archived: "Arsiv" }
+    : { draft: "Draft", published: "Published", archived: "Archived" };
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -76,22 +97,32 @@ export default function MyProjectsPage(): React.ReactElement {
             {projects.map((project) => (
               <Card key={project.slug} className="border-border/80 shadow-none">
                 <CardContent className="flex items-center gap-4 p-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
-                    <FolderOpen className="h-5 w-5 text-muted-foreground" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted">
+                    {project.thumbnailUrl ? (
+                      <img src={project.thumbnailUrl} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <FolderOpen className="h-5 w-5 text-muted-foreground" />
+                    )}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <Link
-                        to={`/projects/${project.slug}`}
+                        to={`/projects/${project.slug}/edit`}
                         className="truncate font-medium hover:underline"
                       >
                         {project.name}
                       </Link>
-                      {project.isPublic ? (
-                        <Globe className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                      ) : (
-                        <Lock className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                      )}
+                      <span
+                        className={
+                          project.status === "published"
+                            ? "shrink-0 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-500"
+                            : project.status === "archived"
+                              ? "shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground"
+                              : "shrink-0 rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-500"
+                        }
+                      >
+                        {statusLabels[project.status] ?? project.status}
+                      </span>
                     </div>
                     {project.tagline ? (
                       <p className="mt-0.5 truncate text-sm text-muted-foreground">{project.tagline}</p>
@@ -102,10 +133,15 @@ export default function MyProjectsPage(): React.ReactElement {
                       <MoreHorizontal className="h-4 w-4" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem className="gap-2" render={<Link to={`/projects/${project.slug}`} />}>
-                        <ExternalLink className="h-4 w-4" />
-                        {isProjectsLabel === "Projects" ? "View" : "Goruntule"}
-                      </DropdownMenuItem>
+                      {project.status === "published" ? (
+                        <DropdownMenuItem
+                          className="gap-2"
+                          render={<Link to={`/p/${project.ownerUsername}/${project.slug}`} />}
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                          {isProjectsLabel === "Projects" ? "View" : "Goruntule"}
+                        </DropdownMenuItem>
+                      ) : null}
                       <DropdownMenuItem className="gap-2" render={<Link to={`/projects/${project.slug}/edit`} />}>
                         <Pencil className="h-4 w-4" />
                         {isProjectsLabel === "Projects" ? "Edit" : "Duzenle"}

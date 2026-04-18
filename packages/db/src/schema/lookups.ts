@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
 
 export const professions = sqliteTable("professions", {
   id: text("id").primaryKey(),
@@ -53,6 +53,24 @@ export const projectStages = sqliteTable("project_stages", {
     .notNull()
     .$defaultFn(() => new Date()),
 });
+
+export const skills = sqliteTable(
+  "skills",
+  {
+    id: text("id").primaryKey(),
+    slug: text("slug").notNull().unique(),
+    nameEn: text("name_en").notNull(),
+    nameTr: text("name_tr").notNull(),
+    icon: text("icon"),
+    parentId: text("parent_id"),
+    sortOrder: integer("sort_order").notNull().default(0),
+    isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (table) => [index("skills_slug_idx").on(table.slug)]
+);
 
 export const technologies = sqliteTable("technologies", {
   id: text("id").primaryKey(),

@@ -30,5 +30,15 @@ export const createUserSchema = z.object({
 
 export const updateUserSchema = createUserSchema.partial().omit({ email: true });
 
+export const updateUserSkillsSchema = z.object({
+  skillIds: z.array(z.string()).min(1).max(15),
+});
+
+export const updateOpenToWorkSchema = z.object({
+  isOpenToWork: z.boolean(),
+});
+
 export type CreateUserInput = z.infer<typeof createUserSchema>;
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+export type UpdateUserSkillsInput = z.infer<typeof updateUserSkillsSchema>;
+export type UpdateOpenToWorkInput = z.infer<typeof updateOpenToWorkSchema>;

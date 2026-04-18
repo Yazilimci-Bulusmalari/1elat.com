@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer, index } from "drizzle-orm/sqlite-core";
-import { professions } from "./lookups";
+import { professions, skills } from "./lookups";
 
 export const users = sqliteTable(
   "users",
@@ -22,6 +22,7 @@ export const users = sqliteTable(
     rating: integer("rating").default(0),
     ratingCount: integer("rating_count").default(0),
     isPublic: integer("is_public", { mode: "boolean" }).default(true),
+    isOpenToWork: integer("is_open_to_work", { mode: "boolean" }).default(false),
     role: text("role", { enum: ["user", "admin"] })
       .notNull()
       .default("user"),
@@ -60,6 +61,26 @@ export const userProfessions = sqliteTable(
       .$defaultFn(() => new Date()),
   },
   (table) => [index("user_professions_user_idx").on(table.userId)]
+);
+
+export const userSkills = sqliteTable(
+  "user_skills",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    skillId: text("skill_id")
+      .notNull()
+      .references(() => skills.id),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .$defaultFn(() => new Date()),
+  },
+  (table) => [
+    index("user_skills_user_idx").on(table.userId),
+    index("user_skills_skill_idx").on(table.skillId),
+  ]
 );
 
 export const follows = sqliteTable(

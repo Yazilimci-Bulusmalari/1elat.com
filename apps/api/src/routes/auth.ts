@@ -20,6 +20,7 @@ import {
   promoteIfAdmin,
   touchLastLogin,
 } from "../services/user.service";
+import { getUserSkills } from "../services/skill.service";
 import type { AppEnv } from "../types";
 
 const OAUTH_STATE_TTL = 600; // 10 minutes
@@ -170,14 +171,15 @@ authRoutes.get("/me", authRequired, async (c) => {
     throw new UnauthorizedError("User not found");
   }
 
-  // Throttled lastLoginAt update (5dk debounce). Hata durumunda /me cevabini bozma.
+  const skills = await getUserSkills(db, userId);
+
   try {
     await touchLastLogin(db, userId);
   } catch {
-    // best-effort: telemetri/log eklenebilir; cevabi bloklamayalim
+    // best-effort
   }
 
-  return c.json({ data: user, error: null });
+  return c.json({ data: { ...user, skills }, error: null });
 });
 
 // --- Helpers ---

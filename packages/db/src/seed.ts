@@ -60,6 +60,26 @@ export function getSeedProjectStages() {
   ];
 }
 
+export function getSeedSkills() {
+  return [
+    { id: "skill_design_00000001", slug: "design", nameEn: "Design", nameTr: "Tasarım", icon: "palette", parentId: null, sortOrder: 1, isActive: true },
+    { id: "skill_frontend_000002", slug: "frontend", nameEn: "Frontend", nameTr: "Frontend", icon: "monitor", parentId: null, sortOrder: 2, isActive: true },
+    { id: "skill_backend_0000003", slug: "backend", nameEn: "Backend", nameTr: "Backend", icon: "server", parentId: null, sortOrder: 3, isActive: true },
+    { id: "skill_fullstack_00004", slug: "fullstack", nameEn: "Fullstack", nameTr: "Fullstack", icon: "layers", parentId: null, sortOrder: 4, isActive: true },
+    { id: "skill_mobile_0000005", slug: "mobile", nameEn: "Mobile", nameTr: "Mobil", icon: "smartphone", parentId: null, sortOrder: 5, isActive: true },
+    { id: "skill_devops_0000006", slug: "devops", nameEn: "DevOps", nameTr: "DevOps", icon: "container", parentId: null, sortOrder: 6, isActive: true },
+    { id: "skill_data_sci_00007", slug: "data-science", nameEn: "Data Science", nameTr: "Veri Bilimi", icon: "bar-chart-3", parentId: null, sortOrder: 7, isActive: true },
+    { id: "skill_ai_ml_00000008", slug: "ai-ml", nameEn: "AI/ML", nameTr: "Yapay Zeka/ML", icon: "brain", parentId: null, sortOrder: 8, isActive: true },
+    { id: "skill_qa_testing_009", slug: "qa-testing", nameEn: "QA/Testing", nameTr: "QA/Test", icon: "shield-check", parentId: null, sortOrder: 9, isActive: true },
+    { id: "skill_product_mgmt10", slug: "product-management", nameEn: "Product Management", nameTr: "Ürün Yönetimi", icon: "briefcase", parentId: null, sortOrder: 10, isActive: true },
+    { id: "skill_ui_ux_0000011", slug: "ui-ux", nameEn: "UI/UX", nameTr: "UI/UX", icon: "figma", parentId: null, sortOrder: 11, isActive: true },
+    { id: "skill_blockchain_012", slug: "blockchain", nameEn: "Blockchain", nameTr: "Blockchain", icon: "link", parentId: null, sortOrder: 12, isActive: true },
+    { id: "skill_game_dev_00013", slug: "game-dev", nameEn: "Game Development", nameTr: "Oyun Geliştirme", icon: "gamepad-2", parentId: null, sortOrder: 13, isActive: true },
+    { id: "skill_security_00014", slug: "security", nameEn: "Security", nameTr: "Güvenlik", icon: "shield", parentId: null, sortOrder: 14, isActive: true },
+    { id: "skill_cloud_0000015", slug: "cloud", nameEn: "Cloud", nameTr: "Bulut", icon: "cloud", parentId: null, sortOrder: 15, isActive: true },
+  ];
+}
+
 export function getSeedTechnologies() {
   return [
     { id: "tech_react_000000001", slug: "react", name: "React", iconUrl: null, group: "framework", websiteUrl: "https://react.dev", sortOrder: 1, isActive: true },

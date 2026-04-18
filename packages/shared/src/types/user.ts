@@ -1,6 +1,15 @@
 export type UserRole = "user" | "admin";
 export type UserStatus = "active" | "suspended";
 
+export interface Skill {
+  id: string;
+  slug: string;
+  nameEn: string;
+  nameTr: string;
+  icon: string | null;
+  parentId: string | null;
+}
+
 export interface User {
   id: string;
   githubId: string | null;
@@ -23,6 +32,7 @@ export interface User {
   rating: number;
   ratingCount: number;
   isPublic: boolean;
+  isOpenToWork: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -36,12 +46,14 @@ export interface UserCard {
   bio: string | null;
   location: string | null;
   rating: number;
+  isOpenToWork: boolean;
   professions: {
     id: string;
     nameEn: string;
     nameTr: string;
     isPrimary: boolean;
   }[];
+  skills: Skill[];
   projectCount: number;
   followerCount: number;
 }
@@ -53,6 +65,7 @@ export interface UserProfile extends User {
     nameTr: string;
     isPrimary: boolean;
   }[];
+  skills: Skill[];
   projectCount: number;
   followerCount: number;
   followingCount: number;

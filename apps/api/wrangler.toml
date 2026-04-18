@@ -26,6 +26,7 @@ bucket_name = "1elat-files"
 # via `pnpm secrets:push` (reads from your shell env, never committed).
 [vars]
 API_VERSION = "0.1.0"
+API_URL = "https://api.1elat.com"
 CORS_ORIGIN = "https://1elat.com"
 GITHUB_REDIRECT_URI = "https://api.1elat.com/auth/github/callback"
 GOOGLE_REDIRECT_URI = "https://api.1elat.com/auth/google/callback"

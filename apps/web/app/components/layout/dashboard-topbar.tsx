@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { LogOut, User, Settings } from "lucide-react";
+import { LogOut, Settings, LayoutDashboard, FolderOpen, Compass, ExternalLink } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
@@ -61,22 +61,43 @@ export function DashboardTopbar({ user, apiUrl, theme, children }: DashboardTopb
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-60">
-            <div className="px-2 py-2">
-              <p className="truncate text-sm font-medium">
-                {user.firstName} {user.lastName}
-              </p>
-              <p className="truncate text-xs text-muted-foreground">
-                {user.email}
-              </p>
-            </div>
+            <Link
+              to={`/u/${user.username}`}
+              className="flex items-start gap-2 rounded-md px-2 py-2 hover:bg-accent/60"
+            >
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium">
+                  {user.firstName} {user.lastName}
+                </p>
+                <p className="truncate text-xs text-muted-foreground">
+                  {user.email}
+                </p>
+              </div>
+              <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            </Link>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="gap-2"
-              render={<Link to={`/u/${user.username}`} />}
+              render={<Link to="/dashboard" />}
             >
-              <User className="h-4 w-4" />
-              {t.nav.profile}
+              <LayoutDashboard className="h-4 w-4" />
+              {t.sidebar.home}
             </DropdownMenuItem>
+            <DropdownMenuItem
+              className="gap-2"
+              render={<Link to="/projects" />}
+            >
+              <FolderOpen className="h-4 w-4" />
+              {t.sidebar.projects}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="gap-2"
+              render={<Link to="/explore/projects" />}
+            >
+              <Compass className="h-4 w-4" />
+              {t.sidebar.explore}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem
               className="gap-2"
               render={<Link to="/settings" />}

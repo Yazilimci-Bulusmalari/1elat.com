@@ -1,7 +1,9 @@
+import { useState, type ReactNode } from "react";
 import { Link, useLocation } from "react-router";
 import {
   LayoutDashboard,
   FolderOpen,
+  Compass,
   Bell,
   Settings,
   Plus,
@@ -14,7 +16,7 @@ import {
 import type { UserRole } from "@1elat/shared";
 import { Button } from "~/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Separator } from "~/components/ui/separator";
+import { NewProjectModal } from "~/components/projects/new-project-modal";
 import { cn } from "~/lib/utils";
 import { useT } from "~/lib/i18n";
 
@@ -37,9 +39,10 @@ function getInitials(firstName: string, lastName: string): string {
   return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 }
 
-export function DashboardSidebar({ user, collapsed, onToggle, apiUrl }: DashboardSidebarProps) {
+export function DashboardSidebar({ user, collapsed, onToggle, apiUrl }: DashboardSidebarProps): ReactNode {
   const { pathname } = useLocation();
   const t = useT();
+  const [newProjectOpen, setNewProjectOpen] = useState<boolean>(false);
 
   type NavItem = {
     to: string;
@@ -47,7 +50,6 @@ export function DashboardSidebar({ user, collapsed, onToggle, apiUrl }: Dashboar
     icon: typeof LayoutDashboard;
     isActive: (p: string) => boolean;
     showAdd?: boolean;
-    addTo?: string;
   };
 
   const mainNav: NavItem[] = [
@@ -62,8 +64,13 @@ export function DashboardSidebar({ user, collapsed, onToggle, apiUrl }: Dashboar
       label: t.sidebar.projects,
       icon: FolderOpen,
       showAdd: true,
-      addTo: "/projects/new",
       isActive: (p: string) => p.startsWith("/projects"),
+    },
+    {
+      to: "/explore/projects",
+      label: t.sidebar.explore,
+      icon: Compass,
+      isActive: (p: string) => p.startsWith("/explore"),
     },
     {
       to: "/notifications",
@@ -144,13 +151,13 @@ export function DashboardSidebar({ user, collapsed, onToggle, apiUrl }: Dashboar
                 <item.icon className="h-4 w-4 shrink-0 opacity-80" />
                 {!collapsed && item.label}
               </Link>
-              {!collapsed && item.showAdd && item.addTo ? (
+              {!collapsed && item.showAdd ? (
                 <Button
+                  type="button"
                   variant="ghost"
                   size="icon-xs"
                   className="size-7 shrink-0"
-                  nativeButton={false}
-                  render={<Link to={item.addTo} />}
+                  onClick={() => setNewProjectOpen(true)}
                   aria-label={t.sidebar.newProjectAria}
                 >
                   <Plus className="h-4 w-4" />
@@ -234,6 +241,11 @@ export function DashboardSidebar({ user, collapsed, onToggle, apiUrl }: Dashboar
           </div>
         )}
       </div>
+      <NewProjectModal
+        open={newProjectOpen}
+        onOpenChange={setNewProjectOpen}
+        apiUrl={apiUrl}
+      />
     </aside>
   );
 }

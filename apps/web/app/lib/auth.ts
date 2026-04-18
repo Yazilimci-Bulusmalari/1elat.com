@@ -1,4 +1,4 @@
-import type { UserRole } from "@1elat/shared";
+import type { UserRole, Skill } from "@1elat/shared";
 
 export interface AuthUser {
   id: string;
@@ -16,7 +16,9 @@ export interface AuthUser {
   githubId: string | null;
   googleId: string | null;
   isPublic: boolean;
+  isOpenToWork: boolean;
   role: UserRole;
+  skills: Skill[];
 }
 
 export async function getAuthUser(
