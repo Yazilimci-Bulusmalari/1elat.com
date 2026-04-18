@@ -1,4 +1,5 @@
-import type { MiddlewareHandler } from "hono";
+import type { MiddlewareHandler, Context } from "hono";
+import { getCookie } from "hono/cookie";
 import { getSession } from "@1elat/auth";
 import { UnauthorizedError } from "../lib/errors";
 import type { AppEnv } from "../types";
@@ -42,8 +43,6 @@ export const authOptional: MiddlewareHandler<AppEnv> = async (c, next) => {
   await next();
 };
 
-function getTokenFromCookie(c: { req: { header: (name: string) => string | undefined } }): string | null {
-  const cookie = c.req.header("cookie") || "";
-  const match = cookie.match(/session=([^;]+)/);
-  return match ? match[1] : null;
+function getTokenFromCookie(c: Context<AppEnv>): string | null {
+  return getCookie(c, "session") ?? null;
 }

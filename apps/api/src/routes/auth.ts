@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import type { Context } from "hono";
-import { setCookie, deleteCookie } from "hono/cookie";
+import { deleteCookie, getCookie } from "hono/cookie";
 import {
   getGitHubAuthUrl,
   exchangeGitHubCode,
@@ -74,7 +74,7 @@ authRoutes.get("/github/callback", async (c) => {
   setSessionCookie(c, sessionToken);
 
   const origin = c.env.CORS_ORIGIN || "http://localhost:5173";
-  return c.redirect(`${origin}/dashboard`);
+  return c.redirect(`${origin}/`);
 });
 
 // --- Google OAuth ---
@@ -125,20 +125,16 @@ authRoutes.get("/google/callback", async (c) => {
   setSessionCookie(c, sessionToken);
 
   const origin = c.env.CORS_ORIGIN || "http://localhost:5173";
-  return c.redirect(`${origin}/dashboard`);
+  return c.redirect(`${origin}/`);
 });
 
 // --- Logout ---
 
 async function performLogout(c: Context<AppEnv>): Promise<void> {
-  const cookie = c.req.header("cookie") || "";
-  const match = cookie.match(/session=([^;]+)/);
-  const token = match ? match[1] : null;
-
+  const token = getCookie(c, "session");
   if (token) {
     await deleteSession(c.env.SESSION, token);
   }
-
   deleteCookie(c, "session", { path: "/" });
 }
 

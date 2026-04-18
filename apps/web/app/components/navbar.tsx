@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { LogOut, Settings, LayoutDashboard, Plus, User as UserIcon, Compass, Users } from "lucide-react";
+import { LogOut, Plus, Compass, Users } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
@@ -21,6 +21,7 @@ interface NavbarProps {
     username: string;
     firstName: string;
     lastName: string;
+    email: string;
     avatarUrl: string | null;
   } | null;
 }
@@ -83,24 +84,15 @@ export function Navbar({ user, apiUrl }: NavbarProps) {
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <div className="px-2 py-1.5">
-                    <p className="text-sm font-medium">{user.firstName} {user.lastName}</p>
-                    <p className="text-xs text-muted-foreground">@{user.username}</p>
+                <DropdownMenuContent align="end" className="w-60">
+                  <div className="px-2 py-2">
+                    <p className="truncate text-sm font-medium">
+                      {user.firstName} {user.lastName}
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {user.email}
+                    </p>
                   </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="gap-2" render={<Link to="/dashboard" />}>
-                    <LayoutDashboard className="h-4 w-4" />
-                    Dashboard
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2" render={<Link to={`/u/${user.username}`} />}>
-                    <UserIcon className="h-4 w-4" />
-                    Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2" render={<Link to="/settings" />}>
-                    <Settings className="h-4 w-4" />
-                    Settings
-                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="gap-2"

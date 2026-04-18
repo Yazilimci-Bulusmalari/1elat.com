@@ -1,13 +1,16 @@
-export async function getAuthUser(
-  request: Request,
-  apiUrl: string,
-): Promise<{
+export interface AuthUser {
   id: string;
   username: string;
   firstName: string;
   lastName: string;
+  email: string;
   avatarUrl: string | null;
-} | null> {
+}
+
+export async function getAuthUser(
+  request: Request,
+  apiUrl: string,
+): Promise<AuthUser | null> {
   const cookie = request.headers.get("cookie") || "";
 
   try {
@@ -18,16 +21,7 @@ export async function getAuthUser(
     if (!res.ok) return null;
 
     const json = (await res.json()) as
-      | {
-          data: {
-            id: string;
-            username: string;
-            firstName: string;
-            lastName: string;
-            avatarUrl: string | null;
-          };
-          error: null;
-        }
+      | { data: AuthUser; error: null }
       | { data: null; error: unknown };
 
     return json.data;

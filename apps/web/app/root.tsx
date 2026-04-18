@@ -5,6 +5,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useLocation,
 } from "react-router";
 import type { LinksFunction, MetaFunction } from "react-router";
 import { Navbar } from "~/components/navbar";
@@ -44,6 +45,8 @@ export async function loader({ request, context }: { request: Request; context: 
 
 export default function Root() {
   const { user, apiUrl } = useLoaderData<typeof loader>();
+  const location = useLocation();
+  const isAuthRoute = location.pathname.startsWith("/auth");
 
   return (
     <html lang="en" className="dark">
@@ -55,7 +58,7 @@ export default function Root() {
         <title>1elat</title>
       </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <Navbar user={user} apiUrl={apiUrl} />
+        {!isAuthRoute && <Navbar user={user} apiUrl={apiUrl} />}
         <main>
           <Outlet />
         </main>
