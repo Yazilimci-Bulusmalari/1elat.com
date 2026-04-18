@@ -107,4 +107,25 @@ describe("updateUserSchema", () => {
       expect(result.data).not.toHaveProperty("email");
     }
   });
+
+  it("treats empty string URLs as undefined", () => {
+    const result = updateUserSchema.safeParse({
+      website: "",
+      twitterUrl: "",
+      githubUrl: "",
+      linkedinUrl: "",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.website).toBeUndefined();
+      expect(result.data.twitterUrl).toBeUndefined();
+      expect(result.data.githubUrl).toBeUndefined();
+      expect(result.data.linkedinUrl).toBeUndefined();
+    }
+  });
+
+  it("rejects invalid non-empty URLs", () => {
+    const result = updateUserSchema.safeParse({ website: "not-a-url" });
+    expect(result.success).toBe(false);
+  });
 });
