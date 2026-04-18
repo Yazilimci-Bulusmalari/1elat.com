@@ -1,0 +1,58 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e8]:
+        - img [ref=e9]
+        - text: 1elat
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - img [ref=e14]
+          - text: commit · main
+        - paragraph [ref=e16]: "feat(auth): ship oauth v1.2"
+        - paragraph [ref=e17]: 2 min ago · by you
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - img [ref=e20]
+          - text: Shipped v1.2.0
+        - paragraph [ref=e25]: 12 developers starred your project
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - img [ref=e28]
+          - text: snippet.ts
+        - generic [ref=e32]: export const ship = () => build().then(deploy);
+      - generic [ref=e33]:
+        - generic [ref=e34]: Join the community
+        - link [ref=e35] [cursor=pointer]:
+          - /url: /explore/projects
+          - text: Explore projects
+          - img [ref=e36]
+    - generic [ref=e38]:
+      - generic [ref=e39]:
+        - generic [ref=e40]:
+          - heading "Build. Share. Ship. Together" [level=1] [ref=e41]:
+            - generic [ref=e42]: Build.
+            - generic [ref=e43]: Share.
+            - generic [ref=e44]: Ship.
+            - generic [ref=e45]:
+              - text: Together
+              - img [ref=e46]
+          - paragraph [ref=e48]: Join the developer platform where ideas become projects and projects find their people.
+        - generic [ref=e49]:
+          - button "Continue with GitHub" [ref=e50] [cursor=pointer]:
+            - img
+            - text: Continue with GitHub
+          - button "Continue with Google" [ref=e51] [cursor=pointer]:
+            - img
+            - text: Continue with Google
+        - paragraph [ref=e52]:
+          - text: By continuing, you agree to our
+          - link "Terms" [ref=e53] [cursor=pointer]:
+            - /url: /terms
+          - text: and
+          - link "Privacy Policy" [ref=e54] [cursor=pointer]:
+            - /url: /privacy
+          - text: .
+      - link "Read more" [ref=e55] [cursor=pointer]:
+        - /url: /explore/projects
+        - text: Read more
+        - img [ref=e56]

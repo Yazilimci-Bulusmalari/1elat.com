@@ -74,7 +74,7 @@ authRoutes.get("/github/callback", async (c) => {
   setSessionCookie(c, sessionToken);
 
   const origin = c.env.CORS_ORIGIN || "http://localhost:5173";
-  return c.redirect(`${origin}/`);
+  return c.redirect(`${origin}/dashboard`);
 });
 
 // --- Google OAuth ---
@@ -125,7 +125,7 @@ authRoutes.get("/google/callback", async (c) => {
   setSessionCookie(c, sessionToken);
 
   const origin = c.env.CORS_ORIGIN || "http://localhost:5173";
-  return c.redirect(`${origin}/`);
+  return c.redirect(`${origin}/dashboard`);
 });
 
 // --- Logout ---

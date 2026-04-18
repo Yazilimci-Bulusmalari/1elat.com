@@ -5,6 +5,15 @@ export interface AuthUser {
   lastName: string;
   email: string;
   avatarUrl: string | null;
+  bio: string | null;
+  website: string | null;
+  githubUrl: string | null;
+  linkedinUrl: string | null;
+  twitterUrl: string | null;
+  location: string | null;
+  githubId: string | null;
+  googleId: string | null;
+  isPublic: boolean;
 }
 
 export async function getAuthUser(

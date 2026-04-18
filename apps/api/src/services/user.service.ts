@@ -201,3 +201,42 @@ export async function getUserByUsername(
     .where(eq(schema.users.username, username))
     .get();
 }
+
+export async function updateUser(
+  db: Database,
+  userId: string,
+  data: Partial<{
+    username: string;
+    firstName: string;
+    lastName: string;
+    bio: string | null;
+    avatarUrl: string | null;
+    website: string | null;
+    githubUrl: string | null;
+    linkedinUrl: string | null;
+    twitterUrl: string | null;
+    location: string | null;
+    isPublic: boolean;
+  }>
+): Promise<UserRow | undefined> {
+  await db
+    .update(schema.users)
+    .set({ ...data, updatedAt: new Date() })
+    .where(eq(schema.users.id, userId));
+
+  return getUserById(db, userId);
+}
+
+export async function isUsernameTaken(
+  db: Database,
+  username: string,
+  excludeUserId: string
+): Promise<boolean> {
+  const existing = await db
+    .select({ id: schema.users.id })
+    .from(schema.users)
+    .where(eq(schema.users.username, username))
+    .get();
+
+  return !!existing && existing.id !== excludeUserId;
+}

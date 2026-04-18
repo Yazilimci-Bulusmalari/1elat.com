@@ -5,6 +5,7 @@ import { secureHeaders } from "hono/secure-headers";
 import { createDb } from "@1elat/db";
 import { errorHandler } from "./middleware/error-handler";
 import { authRoutes } from "./routes/auth";
+import { userRoutes } from "./routes/users";
 import type { AppEnv } from "./types";
 
 const app = new Hono<AppEnv>();
@@ -37,5 +38,6 @@ app.get("/health", (c) => {
 });
 
 app.route("/auth", authRoutes);
+app.route("/users", userRoutes);
 
 export default app;
