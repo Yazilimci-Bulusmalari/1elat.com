@@ -117,11 +117,25 @@ export interface Dictionary {
     explore: string;
     notifications: string;
     settings: string;
+    admin: string;
     newProjectAria: string;
     pro: {
       title: string;
       description: string;
       learnMore: string;
+    };
+  };
+  admin: {
+    title: string;
+    subtitle: string;
+    error: string;
+    stats: {
+      totalUsers: string;
+      totalProjects: string;
+      totalAdmins: string;
+      signupsLast7Days: string;
+      signupsLast30Days: string;
+      projectsLast7Days: string;
     };
   };
   topbar: {
@@ -313,11 +327,25 @@ const tr: Dictionary = {
     explore: "Keşfet",
     notifications: "Bildirimler",
     settings: "Ayarlar",
+    admin: "Yönetim",
     newProjectAria: "Yeni proje",
     pro: {
       title: "Pro",
       description: "Öne çıkan yerleşim ve gelişmiş proje analizlerinin kilidini aç.",
       learnMore: "Daha fazla bilgi",
+    },
+  },
+  admin: {
+    title: "Yönetim Paneli",
+    subtitle: "Platform genelinde temel metrikler ve özet istatistikler.",
+    error: "Yönetim verileri alınamadı. Lütfen daha sonra tekrar deneyin.",
+    stats: {
+      totalUsers: "Toplam Kullanıcı",
+      totalProjects: "Toplam Proje",
+      totalAdmins: "Toplam Yönetici",
+      signupsLast7Days: "Son 7 Gün Kayıt",
+      signupsLast30Days: "Son 30 Gün Kayıt",
+      projectsLast7Days: "Son 7 Gün Proje",
     },
   },
   topbar: {
@@ -510,11 +538,25 @@ const en: Dictionary = {
     explore: "Explore",
     notifications: "Notifications",
     settings: "Settings",
+    admin: "Admin",
     newProjectAria: "New project",
     pro: {
       title: "Pro",
       description: "Unlock featured placement and advanced project insights.",
       learnMore: "Learn more",
+    },
+  },
+  admin: {
+    title: "Admin Panel",
+    subtitle: "Key platform-wide metrics and summary statistics.",
+    error: "Could not load admin data. Please try again later.",
+    stats: {
+      totalUsers: "Total Users",
+      totalProjects: "Total Projects",
+      totalAdmins: "Total Admins",
+      signupsLast7Days: "Signups (Last 7 Days)",
+      signupsLast30Days: "Signups (Last 30 Days)",
+      projectsLast7Days: "Projects (Last 7 Days)",
     },
   },
   topbar: {

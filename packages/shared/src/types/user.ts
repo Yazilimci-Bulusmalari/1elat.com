@@ -1,8 +1,11 @@
+export type UserRole = "user" | "admin";
+
 export interface User {
   id: string;
   githubId: string | null;
   googleId: string | null;
   email: string;
+  role: UserRole;
   username: string;
   firstName: string;
   lastName: string;

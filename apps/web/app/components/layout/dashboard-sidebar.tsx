@@ -9,7 +9,9 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   LogOut,
+  Shield,
 } from "lucide-react";
+import type { UserRole } from "@1elat/shared";
 import { Button } from "~/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Separator } from "~/components/ui/separator";
@@ -21,6 +23,7 @@ export type SidebarUser = {
   firstName: string;
   lastName: string;
   avatarUrl?: string | null;
+  role?: UserRole;
 };
 
 interface DashboardSidebarProps {
@@ -38,7 +41,16 @@ export function DashboardSidebar({ user, collapsed, onToggle, apiUrl }: Dashboar
   const { pathname } = useLocation();
   const t = useT();
 
-  const mainNav = [
+  type NavItem = {
+    to: string;
+    label: string;
+    icon: typeof LayoutDashboard;
+    isActive: (p: string) => boolean;
+    showAdd?: boolean;
+    addTo?: string;
+  };
+
+  const mainNav: NavItem[] = [
     {
       to: "/dashboard",
       label: t.sidebar.home,
@@ -65,7 +77,16 @@ export function DashboardSidebar({ user, collapsed, onToggle, apiUrl }: Dashboar
       icon: Settings,
       isActive: (p: string) => p.startsWith("/settings"),
     },
-  ] as const;
+  ];
+
+  if (user.role === "admin") {
+    mainNav.push({
+      to: "/dashboard/admin",
+      label: t.sidebar.admin,
+      icon: Shield,
+      isActive: (p: string) => p.startsWith("/dashboard/admin"),
+    });
+  }
 
   return (
     <aside
@@ -123,7 +144,7 @@ export function DashboardSidebar({ user, collapsed, onToggle, apiUrl }: Dashboar
                 <item.icon className="h-4 w-4 shrink-0 opacity-80" />
                 {!collapsed && item.label}
               </Link>
-              {!collapsed && "showAdd" in item && item.showAdd ? (
+              {!collapsed && item.showAdd && item.addTo ? (
                 <Button
                   variant="ghost"
                   size="icon-xs"

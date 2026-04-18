@@ -25,6 +25,7 @@ export default [
   // Authenticated routes (dashboard shell)
   layout("routes/_auth.tsx", [
     route("dashboard", "routes/_auth.dashboard.tsx"),
+    route("dashboard/admin", "routes/_auth.dashboard.admin.tsx"),
     route("projects", "routes/_auth.projects.tsx"),
     route("projects/new", "routes/projects.new.tsx"),
     route("projects/:slug", "routes/projects.$slug.tsx"),

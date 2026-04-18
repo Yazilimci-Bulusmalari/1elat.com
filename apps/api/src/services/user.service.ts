@@ -191,6 +191,34 @@ export async function getUserById(
   return db.select().from(schema.users).where(eq(schema.users.id, id)).get();
 }
 
+/**
+ * Idempotent admin promotion. Login akislarinda her seferinde guvenle cagrilabilir.
+ * SRP: yalnizca rol yukseltir; baska yan etki uretmez.
+ */
+export async function promoteIfAdmin(
+  db: Database,
+  user: UserRow,
+  adminEmailsCsv: string | undefined
+): Promise<UserRow> {
+  if (!adminEmailsCsv) return user;
+
+  const adminEmails = adminEmailsCsv
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (adminEmails.length === 0) return user;
+  if (!adminEmails.includes(user.email.toLowerCase())) return user;
+  if (user.role === "admin") return user;
+
+  await db
+    .update(schema.users)
+    .set({ role: "admin", updatedAt: new Date() })
+    .where(eq(schema.users.id, user.id));
+
+  return { ...user, role: "admin" };
+}
+
 export async function getUserByUsername(
   db: Database,
   username: string

@@ -1,4 +1,3 @@
-import type { ComponentType } from "react";
 import { useRouteLoaderData } from "react-router";
 import {
   Calendar,
@@ -6,7 +5,7 @@ import {
   Clock,
   TrendingUp,
 } from "lucide-react";
-import { Card, CardContent } from "~/components/ui/card";
+import { KpiCard } from "~/components/dashboard/kpi-card";
 import { useT, useLang, type Lang } from "~/lib/i18n";
 import type { loader as authLoader } from "./_auth";
 
@@ -16,42 +15,6 @@ function formatToday(lang: Lang): string {
     month: "short",
     year: "numeric",
   }).format(new Date());
-}
-
-function KpiCard({
-  icon: Icon,
-  label,
-  value,
-  hint,
-  trend,
-  trendUp,
-}: {
-  icon: ComponentType<{ className?: string }>;
-  label: string;
-  value: string;
-  hint: string;
-  trend: string;
-  trendUp: boolean;
-}) {
-  return (
-    <Card className="border-border/80 shadow-none">
-      <CardContent className="flex flex-col gap-3 p-5">
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-sm font-medium text-muted-foreground">{label}</span>
-          <div className="flex size-9 items-center justify-center rounded-lg bg-muted/60">
-            <Icon className="h-4 w-4 text-foreground/80" />
-          </div>
-        </div>
-        <div>
-          <p className="text-2xl font-bold tracking-tight">{value}</p>
-          <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-            <span className={trendUp ? "text-emerald-500" : "text-amber-500"}>{trend}</span>
-            <span>{hint}</span>
-          </p>
-        </div>
-      </CardContent>
-    </Card>
-  );
 }
 
 export default function DashboardPage() {

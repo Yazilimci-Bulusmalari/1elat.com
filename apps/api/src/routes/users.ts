@@ -46,6 +46,7 @@ userRoutes.get("/:username", async (c) => {
   const user = await getUserByUsername(db, username);
   if (!user) throw new NotFoundError("User");
 
-  const { githubId, googleId, ...publicData } = user;
+  // Public profilde role gizlenir (admin keşfini zorlastirma).
+  const { githubId, googleId, role, ...publicData } = user;
   return c.json({ data: publicData, error: null });
 });

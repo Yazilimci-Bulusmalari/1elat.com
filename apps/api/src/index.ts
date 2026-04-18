@@ -6,6 +6,7 @@ import { createDb } from "@1elat/db";
 import { errorHandler } from "./middleware/error-handler";
 import { authRoutes } from "./routes/auth";
 import { userRoutes } from "./routes/users";
+import { adminRoutes } from "./routes/admin";
 import type { AppEnv } from "./types";
 
 const app = new Hono<AppEnv>();
@@ -39,5 +40,6 @@ app.get("/health", (c) => {
 
 app.route("/auth", authRoutes);
 app.route("/users", userRoutes);
+app.route("/admin", adminRoutes);
 
 export default app;

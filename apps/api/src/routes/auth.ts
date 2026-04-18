@@ -17,6 +17,7 @@ import {
   findOrCreateUserByGitHub,
   findOrCreateUserByGoogle,
   getUserById,
+  promoteIfAdmin,
 } from "../services/user.service";
 import type { AppEnv } from "../types";
 
@@ -68,7 +69,8 @@ authRoutes.get("/github/callback", async (c) => {
   const profile = await getGitHubProfile(accessToken);
 
   const db = c.get("db");
-  const { user } = await findOrCreateUserByGitHub(db, profile);
+  const { user: rawUser } = await findOrCreateUserByGitHub(db, profile);
+  const user = await promoteIfAdmin(db, rawUser, c.env.ADMIN_EMAILS);
 
   const sessionToken = await createSession(c.env.SESSION, user.id);
   setSessionCookie(c, sessionToken);
@@ -119,7 +121,8 @@ authRoutes.get("/google/callback", async (c) => {
   const profile = await getGoogleProfile(accessToken);
 
   const db = c.get("db");
-  const { user } = await findOrCreateUserByGoogle(db, profile);
+  const { user: rawUser } = await findOrCreateUserByGoogle(db, profile);
+  const user = await promoteIfAdmin(db, rawUser, c.env.ADMIN_EMAILS);
 
   const sessionToken = await createSession(c.env.SESSION, user.id);
   setSessionCookie(c, sessionToken);

@@ -31,3 +31,7 @@ GITHUB_REDIRECT_URI = "https://api.1elat.com/auth/github/callback"
 GOOGLE_REDIRECT_URI = "https://api.1elat.com/auth/google/callback"
 GITHUB_CLIENT_ID = "Ov23li8j4ykTpKlurpha"
 GOOGLE_CLIENT_ID = "555575126722-rljjpbbq1sc4rptar7h2hghap1kuflg7.apps.googleusercontent.com"
+# Admin promotion - login sirasinda eslesen email'lere admin rolu atanir (idempotent).
+# Virgulle ayrilmis liste. Production'da `wrangler secret put ADMIN_EMAILS` ile veya
+# burada [vars] altinda set edilir. Asagidaki ornek YORUM olarak biraktir.
+# ADMIN_EMAILS = "abdullah@example.com,seda@example.com"

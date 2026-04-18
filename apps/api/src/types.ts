@@ -13,6 +13,7 @@ export type Bindings = {
   GOOGLE_REDIRECT_URI: string;
   API_VERSION: string;
   CORS_ORIGIN: string;
+  ADMIN_EMAILS?: string;
 };
 
 export type Variables = {

@@ -6,7 +6,9 @@
     "build": "wrangler deploy --dry-run --outdir dist",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "secrets:push": "bash scripts/push-production-secrets.sh"
+    "secrets:push": "bash scripts/push-production-secrets.sh",
+    "seed:admin:local": "wrangler d1 execute 1elat-db --local --file=scripts/seed-admin.sql",
+    "seed:admin:remote": "wrangler d1 execute 1elat-db --remote --file=scripts/seed-admin.sql"
   },
   "dependencies": {
     "@1elat/auth": "workspace:*",

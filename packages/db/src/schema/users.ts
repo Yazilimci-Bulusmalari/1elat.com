@@ -22,6 +22,9 @@ export const users = sqliteTable(
     rating: integer("rating").default(0),
     ratingCount: integer("rating_count").default(0),
     isPublic: integer("is_public", { mode: "boolean" }).default(true),
+    role: text("role", { enum: ["user", "admin"] })
+      .notNull()
+      .default("user"),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .$defaultFn(() => new Date()),
