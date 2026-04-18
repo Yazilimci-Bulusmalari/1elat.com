@@ -15,6 +15,13 @@
       "when": 1776505130205,
       "tag": "0001_lyrical_black_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1776509746492,
+      "tag": "0002_bitter_sprite",
+      "breakpoints": true
     }
   ]
 }

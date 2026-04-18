@@ -1,4 +1,5 @@
 export type UserRole = "user" | "admin";
+export type UserStatus = "active" | "suspended";
 
 export interface User {
   id: string;
@@ -6,6 +7,8 @@ export interface User {
   googleId: string | null;
   email: string;
   role: UserRole;
+  status: UserStatus;
+  lastLoginAt: Date | null;
   username: string;
   firstName: string;
   lastName: string;

@@ -18,6 +18,7 @@ import {
   findOrCreateUserByGoogle,
   getUserById,
   promoteIfAdmin,
+  touchLastLogin,
 } from "../services/user.service";
 import type { AppEnv } from "../types";
 
@@ -167,6 +168,13 @@ authRoutes.get("/me", authRequired, async (c) => {
 
   if (!user) {
     throw new UnauthorizedError("User not found");
+  }
+
+  // Throttled lastLoginAt update (5dk debounce). Hata durumunda /me cevabini bozma.
+  try {
+    await touchLastLogin(db, userId);
+  } catch {
+    // best-effort: telemetri/log eklenebilir; cevabi bloklamayalim
   }
 
   return c.json({ data: user, error: null });

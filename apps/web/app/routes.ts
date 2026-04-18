@@ -8,10 +8,8 @@ export default [
   route("auth/onboarding", "routes/auth.onboarding.tsx"),
 
   // Explore (public)
-  layout("routes/explore.tsx", [
-    route("explore/projects", "routes/explore.projects.tsx"),
-    route("explore/developers", "routes/explore.developers.tsx"),
-  ]),
+  route("explore/projects", "routes/explore.projects.tsx"),
+  route("explore/developers", "routes/explore.developers.tsx"),
 
   // User profile (public)
   route("u/:username", "routes/u.$username.tsx"),

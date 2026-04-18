@@ -4,16 +4,44 @@ export type Lang = "tr" | "en";
 
 export interface Dictionary {
   nav: {
-    explore: string;
     developers: string;
     projects: string;
-    community: string;
     signIn: string;
     getStarted: string;
     newProject: string;
     signOut: string;
     profile: string;
     settings: string;
+  };
+  explore: {
+    developers: {
+      title: string;
+      subtitle: string;
+      filters: string;
+      empty: string;
+      tags: {
+        all: string;
+        frontend: string;
+        backend: string;
+        fullstack: string;
+        mobile: string;
+        devops: string;
+      };
+    };
+    projects: {
+      title: string;
+      subtitle: string;
+      filters: string;
+      empty: string;
+      tags: {
+        all: string;
+        web: string;
+        mobile: string;
+        aiMl: string;
+        devops: string;
+        openSource: string;
+      };
+    };
   };
   home: {
     hero: {
@@ -137,6 +165,42 @@ export interface Dictionary {
       signupsLast30Days: string;
       projectsLast7Days: string;
     };
+    users: {
+      sectionTitle: string;
+      sectionSubtitle: string;
+      searchPlaceholder: string;
+      filters: {
+        roleLabel: string;
+        statusLabel: string;
+        role: { all: string; admin: string; user: string };
+        status: { all: string; active: string; suspended: string };
+      };
+      table: {
+        user: string;
+        role: string;
+        status: string;
+        lastLogin: string;
+        actions: string;
+      };
+      roleLabel: { user: string; admin: string };
+      statusLabel: { active: string; suspended: string };
+      lastLoginNever: string;
+      actions: {
+        viewProfile: string;
+        toggleStatusActive: string;
+        toggleStatusSuspended: string;
+        makeAdmin: string;
+        removeAdmin: string;
+        cannotModifySelf: string;
+      };
+      pagination: {
+        previous: string;
+        next: string;
+        pageOf: string;
+      };
+      errors: { updateFailed: string; loadFailed: string };
+      empty: string;
+    };
   };
   topbar: {
     searchPlaceholder: string;
@@ -185,6 +249,19 @@ export interface Dictionary {
       browseDevelopers: string;
     };
   };
+  publicProfile: {
+    notFound: string;
+    notFoundDescription: string;
+    backHome: string;
+    locationNotSet: string;
+    noWebsite: string;
+    joinedAt: string;
+    projects: string;
+    activity: string;
+    noProjectsYet: string;
+    noActivityYet: string;
+    follow: string;
+  };
   footer: {
     newsletter: {
       title: string;
@@ -213,16 +290,44 @@ export interface Dictionary {
 
 const tr: Dictionary = {
   nav: {
-    explore: "Keşfet",
     developers: "Geliştiriciler",
     projects: "Projeler",
-    community: "Topluluk",
     signIn: "Giriş Yap",
     getStarted: "Hemen Başla",
     newProject: "Yeni Proje",
     signOut: "Çıkış Yap",
     profile: "Profil",
     settings: "Ayarlar",
+  },
+  explore: {
+    developers: {
+      title: "Geliştiricileri Keşfet",
+      subtitle: "Topluluktaki geliştiricileri bul ve bağlantı kur",
+      filters: "Filtreler",
+      empty: "Geliştiriciler burada görünecek",
+      tags: {
+        all: "Tümü",
+        frontend: "Frontend",
+        backend: "Backend",
+        fullstack: "Fullstack",
+        mobile: "Mobil",
+        devops: "DevOps",
+      },
+    },
+    projects: {
+      title: "Projeleri Keşfet",
+      subtitle: "Geliştirici topluluğundan projeleri keşfet",
+      filters: "Filtreler",
+      empty: "Projeler burada görünecek",
+      tags: {
+        all: "Tümü",
+        web: "Web",
+        mobile: "Mobil",
+        aiMl: "AI/ML",
+        devops: "DevOps",
+        openSource: "Açık Kaynak",
+      },
+    },
   },
   home: {
     hero: {
@@ -347,6 +452,45 @@ const tr: Dictionary = {
       signupsLast30Days: "Son 30 Gün Kayıt",
       projectsLast7Days: "Son 7 Gün Proje",
     },
+    users: {
+      sectionTitle: "Kullanıcı Yönetimi",
+      sectionSubtitle: "Platformdaki kullanıcıları arayın, filtreleyin ve yönetin.",
+      searchPlaceholder: "Ad veya e-posta ile arayın...",
+      filters: {
+        roleLabel: "Rol",
+        statusLabel: "Durum",
+        role: { all: "Tümü", admin: "Yöneticiler", user: "Kullanıcılar" },
+        status: { all: "Tümü", active: "Aktif", suspended: "Pasif" },
+      },
+      table: {
+        user: "Kullanıcı",
+        role: "Rol",
+        status: "Durum",
+        lastLogin: "Son Giriş",
+        actions: "İşlemler",
+      },
+      roleLabel: { user: "Kullanıcı", admin: "Yönetici" },
+      statusLabel: { active: "Aktif", suspended: "Pasif" },
+      lastLoginNever: "Hiç",
+      actions: {
+        viewProfile: "Profili görüntüle",
+        toggleStatusActive: "Pasifleştir",
+        toggleStatusSuspended: "Aktifleştir",
+        makeAdmin: "Admin yap",
+        removeAdmin: "Adminliği kaldır",
+        cannotModifySelf: "Kendinize uygulayamazsınız",
+      },
+      pagination: {
+        previous: "Önceki",
+        next: "Sonraki",
+        pageOf: "{page} / {total}",
+      },
+      errors: {
+        updateFailed: "Güncelleme başarısız",
+        loadFailed: "Kullanıcılar yüklenemedi",
+      },
+      empty: "Sonuç bulunamadı",
+    },
   },
   topbar: {
     searchPlaceholder: "Ara",
@@ -395,6 +539,19 @@ const tr: Dictionary = {
       browseDevelopers: "Geliştiricilere göz at",
     },
   },
+  publicProfile: {
+    notFound: "Kullanıcı bulunamadı",
+    notFoundDescription: "Bu kullanıcı adıyla eşleşen bir profil bulunamadı.",
+    backHome: "Ana sayfaya dön",
+    locationNotSet: "Konum belirtilmemiş",
+    noWebsite: "Web sitesi yok",
+    joinedAt: "Katılım: {date}",
+    projects: "Projeler",
+    activity: "Etkinlik",
+    noProjectsYet: "Henüz proje yok",
+    noActivityYet: "Henüz etkinlik yok",
+    follow: "Takip Et",
+  },
   footer: {
     newsletter: {
       title: "Güncellemelere abone ol",
@@ -424,16 +581,44 @@ const tr: Dictionary = {
 
 const en: Dictionary = {
   nav: {
-    explore: "Explore",
     developers: "Developers",
     projects: "Projects",
-    community: "Community",
     signIn: "Sign In",
     getStarted: "Get Started",
     newProject: "New Project",
     signOut: "Sign Out",
     profile: "Profile",
     settings: "Settings",
+  },
+  explore: {
+    developers: {
+      title: "Explore Developers",
+      subtitle: "Find and connect with developers in the community",
+      filters: "Filters",
+      empty: "Developers will appear here",
+      tags: {
+        all: "All",
+        frontend: "Frontend",
+        backend: "Backend",
+        fullstack: "Fullstack",
+        mobile: "Mobile",
+        devops: "DevOps",
+      },
+    },
+    projects: {
+      title: "Explore Projects",
+      subtitle: "Discover projects from the developer community",
+      filters: "Filters",
+      empty: "Projects will appear here",
+      tags: {
+        all: "All",
+        web: "Web",
+        mobile: "Mobile",
+        aiMl: "AI/ML",
+        devops: "DevOps",
+        openSource: "Open Source",
+      },
+    },
   },
   home: {
     hero: {
@@ -558,6 +743,45 @@ const en: Dictionary = {
       signupsLast30Days: "Signups (Last 30 Days)",
       projectsLast7Days: "Projects (Last 7 Days)",
     },
+    users: {
+      sectionTitle: "User Management",
+      sectionSubtitle: "Search, filter and manage platform users.",
+      searchPlaceholder: "Search by name or email...",
+      filters: {
+        roleLabel: "Role",
+        statusLabel: "Status",
+        role: { all: "All", admin: "Admins", user: "Users" },
+        status: { all: "All", active: "Active", suspended: "Suspended" },
+      },
+      table: {
+        user: "User",
+        role: "Role",
+        status: "Status",
+        lastLogin: "Last Login",
+        actions: "Actions",
+      },
+      roleLabel: { user: "User", admin: "Admin" },
+      statusLabel: { active: "Active", suspended: "Suspended" },
+      lastLoginNever: "Never",
+      actions: {
+        viewProfile: "View profile",
+        toggleStatusActive: "Suspend",
+        toggleStatusSuspended: "Activate",
+        makeAdmin: "Make admin",
+        removeAdmin: "Remove admin",
+        cannotModifySelf: "You cannot apply this to yourself",
+      },
+      pagination: {
+        previous: "Previous",
+        next: "Next",
+        pageOf: "{page} / {total}",
+      },
+      errors: {
+        updateFailed: "Update failed",
+        loadFailed: "Could not load users",
+      },
+      empty: "No results found",
+    },
   },
   topbar: {
     searchPlaceholder: "Search",
@@ -605,6 +829,19 @@ const en: Dictionary = {
       browseDevelopersHint: "Discover developers by role and stack.",
       browseDevelopers: "Browse developers",
     },
+  },
+  publicProfile: {
+    notFound: "User not found",
+    notFoundDescription: "No profile matches this username.",
+    backHome: "Back to home",
+    locationNotSet: "Location not set",
+    noWebsite: "No website",
+    joinedAt: "Joined {date}",
+    projects: "Projects",
+    activity: "Activity",
+    noProjectsYet: "No projects yet",
+    noActivityYet: "No recent activity",
+    follow: "Follow",
   },
   footer: {
     newsletter: {

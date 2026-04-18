@@ -255,6 +255,37 @@ export async function updateUser(
   return getUserById(db, userId);
 }
 
+/**
+ * Son giris zamani guncelleme - throttled (5dk debounce).
+ * SRP: yalnizca lastLoginAt damgasini gunceller.
+ * DB write spam'ini onlemek icin onceki damga ile farki >=5dk olmali.
+ */
+const TOUCH_LAST_LOGIN_THROTTLE_MS = 5 * 60 * 1000;
+
+export async function touchLastLogin(
+  db: Database,
+  userId: string,
+  now: Date = new Date()
+): Promise<void> {
+  const user = await db
+    .select({ lastLoginAt: schema.users.lastLoginAt })
+    .from(schema.users)
+    .where(eq(schema.users.id, userId))
+    .get();
+
+  if (!user) return;
+
+  const last = user.lastLoginAt;
+  if (last && now.getTime() - last.getTime() < TOUCH_LAST_LOGIN_THROTTLE_MS) {
+    return;
+  }
+
+  await db
+    .update(schema.users)
+    .set({ lastLoginAt: now })
+    .where(eq(schema.users.id, userId));
+}
+
 export async function isUsernameTaken(
   db: Database,
   username: string,

@@ -36,10 +36,8 @@ export function Navbar({ user, apiUrl, theme }: NavbarProps): React.ReactElement
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks = [
-    { label: t.nav.explore, href: "/explore/projects" },
     { label: t.nav.developers, href: "/explore/developers" },
     { label: t.nav.projects, href: "/explore/projects" },
-    { label: t.nav.community, href: "/explore/developers" },
   ];
 
   return (
