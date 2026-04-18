@@ -114,6 +114,9 @@ importers:
       tw-animate-css:
         specifier: ^1.4.0
         version: 1.4.0
+      zod:
+        specifier: ^3.24.0
+        version: 3.25.76
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20250327.0
